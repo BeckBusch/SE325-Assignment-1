@@ -2,14 +2,19 @@ package se325.flights.domain;
 
 import se325.flights.CabinClass;
 
+import javax.persistence.*;
 import java.util.Objects;
 
 /**
  * Represents the seat pricing for a particular {@link CabinClass} on a partcular {@link Flight}.
  */
+
+@Embeddable
 public class SeatPricing {
 
+    @Enumerated(EnumType.STRING)
     private CabinClass cabinClass;
+
     private int price;
 
     public CabinClass getCabinClass() {

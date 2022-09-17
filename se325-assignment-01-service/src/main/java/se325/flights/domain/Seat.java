@@ -1,11 +1,14 @@
 package se325.flights.domain;
 
+import javax.persistence.*;
 import java.util.Objects;
 
 /**
  * Represents a single Seat in a {@link FlightBooking}. Unbooked seats do not have associated Seat instances in the
  * database, only booked ones.
  */
+
+@Embeddable
 public class Seat implements Comparable<Seat> {
 
     private int rowNumber;

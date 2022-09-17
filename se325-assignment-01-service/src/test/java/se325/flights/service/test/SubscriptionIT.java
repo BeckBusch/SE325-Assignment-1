@@ -1,5 +1,6 @@
 package se325.flights.service.test;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import se325.flights.CabinClass;
 import se325.flights.dto.AvailableSeatsSubscriptionDTO;
@@ -20,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 /**
  * Tests functionality related to subscriptions (async HTTP requests).
  */
+@Disabled
 public class SubscriptionIT extends BaseIntegrationTests {
 
     /**

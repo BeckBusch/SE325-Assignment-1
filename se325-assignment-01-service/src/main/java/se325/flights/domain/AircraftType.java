@@ -2,18 +2,23 @@ package se325.flights.domain;
 
 import se325.flights.CabinClass;
 
+import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
 /**
  * Represents a type of aircraft on which a {@link Flight} can be made.
  */
+@Entity
 public class AircraftType {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
 
+    @ElementCollection(fetch = FetchType.EAGER)
     private Set<SeatingZone> seatingZones = new HashSet<>();
 
     public Long getId() {

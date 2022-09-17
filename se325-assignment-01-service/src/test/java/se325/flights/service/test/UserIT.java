@@ -1,5 +1,6 @@
 package se325.flights.service.test;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import se325.flights.dto.UserDTO;
 
@@ -12,6 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * Tests functionality related to users and logging in / out.
  */
+@Disabled
 public class UserIT extends BaseIntegrationTests {
 
     /**

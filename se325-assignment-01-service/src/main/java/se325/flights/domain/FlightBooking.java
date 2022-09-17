@@ -1,16 +1,26 @@
 package se325.flights.domain;
 
+import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
 /**
  * Represents a booking by a particular {@link User} on a particular {@link Flight}.
  */
+
+@Entity
 public class FlightBooking {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @ManyToOne(fetch = FetchType.EAGER)
     private Flight flight;
+    @ManyToOne(fetch = FetchType.EAGER)
     private User user;
+
+    @ElementCollection
     private Set<Seat> seats = new HashSet<>();
 
     /**

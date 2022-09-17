@@ -1,5 +1,6 @@
 package se325.flights.domain;
 
+import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -7,14 +8,19 @@ import java.util.Set;
  * Represents a user of the system. Users are capable of authenticating and making {@link FlightBooking}s on
  * {@link Flight}s.
  */
+
+@Entity
 public class User {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String username;
     private String passHash;
     private String authToken;
 
+    @ManyToMany(fetch = FetchType.EAGER)
     private Set<FlightBooking> bookings = new HashSet<>();
 
     /**

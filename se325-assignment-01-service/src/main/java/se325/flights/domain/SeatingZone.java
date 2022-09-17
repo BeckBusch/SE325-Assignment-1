@@ -2,17 +2,24 @@ package se325.flights.domain;
 
 import se325.flights.CabinClass;
 
+import javax.persistence.*;
 import java.util.Objects;
 
 /**
  * Represents a particular seating zone on an {@link AircraftType}. A zone is a number of rows of seats on a plane,
  * which share a {@link CabinClass}.
  */
+
+@Embeddable
+@Access(AccessType.FIELD)
 public class SeatingZone {
 
     private int startingRowNumber;
     private int numRows;
+
+    @Enumerated(EnumType.STRING)
     private CabinClass cabinClass;
+
     private String seatCodeData;
 
     public int getStartingRowNumber() {

@@ -2,6 +2,7 @@ package se325.flights.domain;
 
 import se325.flights.CabinClass;
 
+import javax.persistence.*;
 import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -17,16 +18,29 @@ import java.util.stream.Collectors;
  * {@link CabinClass} of the seats being booked (determined by the {@link AircraftType} of a flight), and the
  * price-per-cabin-class for a particular cabin class on a flight.
  */
+@Entity
 public class Flight {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String name;
     private ZonedDateTime departureTime;
     private ZonedDateTime arrivalTime;
+
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "flight")
     private Set<FlightBooking> bookings = new HashSet<>();
+
+    @ManyToOne
     private AircraftType aircraftType;
+
+    @ManyToOne
     private Airport origin;
+    @ManyToOne
     private Airport destination;
+
+    @ElementCollection(fetch = FetchType.EAGER)
     private Set<SeatPricing> seatPricings = new HashSet<>();
 
     public Long getId() {
@@ -145,8 +159,21 @@ public class Flight {
      *                          if any of the requested seats are invalid.
      */
     public FlightBooking makeBooking(User user, List<String> seatCodes) throws BookingException {
+        ensureNotEmptyBooking(seatCodes);
+        ensureUnbooked(seatCodes);
 
-        throw new UnsupportedOperationException("TODO: Implement this method.");
+        FlightBooking result = new FlightBooking(user, this);
+
+        for (String i : seatCodes){
+            int priceTemp = getPriceFor(aircraftType.getCabinClass(i));
+            Seat tempSeat = new Seat(i, priceTemp);
+
+            result.getSeats().add(tempSeat);
+        }
+
+        bookings.add(result);
+
+        return result;
     }
 
     public FlightBooking makeBooking(User user, String... seatCodes) throws BookingException {

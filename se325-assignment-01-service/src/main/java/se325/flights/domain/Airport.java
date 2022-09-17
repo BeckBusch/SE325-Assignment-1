@@ -1,11 +1,17 @@
 package se325.flights.domain;
 
+import javax.persistence.*;
+
 /**
  * Represents an Airport. Airports can be the origin / destination of {@link Flight}s.
  */
+@Entity
 public class Airport {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String name;
     private String code;
     private double latitude;

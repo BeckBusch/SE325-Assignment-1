@@ -1,5 +1,6 @@
 package se325.flights.service.test;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import se325.flights.dto.BookingInfoDTO;
 import se325.flights.dto.FlightDTO;
@@ -13,6 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 /**
  * Tests functionality related to retrieving flight information.
  */
+
 public class FlightIT extends BaseIntegrationTests {
 
     /**

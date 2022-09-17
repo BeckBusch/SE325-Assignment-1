@@ -1,5 +1,6 @@
 package se325.flights.service.test;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import se325.flights.dto.BookingInfoDTO;
 import se325.flights.dto.BookingRequestDTO;
@@ -17,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * Tests functionality related to flight bookings.
  */
+@Disabled
 public class BookingIT extends BaseIntegrationTests {
 
     /**
