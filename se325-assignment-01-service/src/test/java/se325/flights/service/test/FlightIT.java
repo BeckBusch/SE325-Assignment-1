@@ -15,6 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * Tests functionality related to retrieving flight information.
  */
 
+@Disabled
 public class FlightIT extends BaseIntegrationTests {
 
     /**

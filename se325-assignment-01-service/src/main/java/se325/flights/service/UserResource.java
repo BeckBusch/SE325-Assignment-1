@@ -5,10 +5,7 @@ import se325.flights.domain.mappers.UserMapper;
 import se325.flights.dto.UserDTO;
 import se325.flights.util.SecurityUtils;
 
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.NonUniqueResultException;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -86,7 +83,7 @@ public class UserResource {
 
     @GET
     @Path("logout")
-    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response userLogout() {
         NewCookie deadCookie = SecurityUtils.generateDeleteAuthCookie();
         return Response.noContent().cookie(deadCookie).build();

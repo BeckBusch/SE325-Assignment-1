@@ -5,6 +5,7 @@ import se325.flights.domain.Airport;
 import se325.flights.domain.Flight;
 import se325.flights.domain.User;
 import se325.flights.domain.mappers.FlightMapper;
+import se325.flights.dto.BookingInfoDTO;
 import se325.flights.dto.FlightDTO;
 
 import javax.persistence.EntityManager;
@@ -109,6 +110,27 @@ public class FlightsResource {
         }
     }
 
+    @GET
+    @Path("{id}/booking-info")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response bookingInfo(@PathParam("id") long id) {
+        EntityManager em = PersistenceManager.instance().createEntityManager();
+        try {
+            TypedQuery<Flight> flightsQuery = em.createQuery(
+                    "select f from Flight f where f.id = :idLink", Flight.class)
+                    .setParameter("idLink", id);
 
+            if (flightsQuery.getResultList().size() == 0) {
+                return Response.status(Response.Status.NOT_FOUND).build();
+            }
+
+            BookingInfoDTO infoRes = FlightMapper.toBookingInfoDTO(flightsQuery.getSingleResult());
+
+            return Response.ok(infoRes).build();
+
+        } finally {
+            em.close();
+        }
+    }
 
 }

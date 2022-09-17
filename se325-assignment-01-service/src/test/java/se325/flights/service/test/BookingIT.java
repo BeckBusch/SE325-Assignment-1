@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * Tests functionality related to flight bookings.
  */
-@Disabled
+
 public class BookingIT extends BaseIntegrationTests {
 
     /**
