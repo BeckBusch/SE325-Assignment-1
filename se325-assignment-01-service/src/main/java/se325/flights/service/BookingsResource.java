@@ -10,6 +10,7 @@ import se325.flights.dto.FlightBookingDTO;
 import se325.flights.util.SecurityUtils;
 
 import javax.persistence.EntityManager;
+import javax.persistence.LockModeType;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import javax.ws.rs.*;
@@ -40,7 +41,10 @@ public class BookingsResource {
 
             TypedQuery<Flight> flightsQuery = em.createQuery(
                             "select f from Flight f where f.id = :idLink", Flight.class)
+                    .setLockMode(LockModeType.PESSIMISTIC_WRITE)
+                    .setHint("javax.persistence.lock.timeout", 5000)
                     .setParameter("idLink", bookRequest.getFlightId());
+
 
             Flight bookedFlight = flightsQuery.getSingleResult();
 
@@ -52,10 +56,16 @@ public class BookingsResource {
             return Response.created(URI.create("/bookings/" + bookingObj.getId())).build();
 
         } catch (NoResultException e) {
+            em.getTransaction().rollback();
             return Response.status(Response.Status.NOT_FOUND).build();
         } catch (BookingException e) {
+            em.getTransaction().rollback();
             return Response.status(Response.Status.CONFLICT).build();
-        } finally {
+        } catch (Exception e) {
+            em.getTransaction().rollback();
+            return Response.status(Response.Status.CONFLICT).build();
+        }
+        finally {
             em.close();
         }
     }
