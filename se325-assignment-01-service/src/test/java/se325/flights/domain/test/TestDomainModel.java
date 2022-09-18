@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * particular Maven goal - but will be run automatically when Maven's test goal (and highter - package, verify,
  * install, ...) is executed.
  */
-@Disabled
+//@Disabled
 public class TestDomainModel {
 
     private static PersistenceManager PM;
