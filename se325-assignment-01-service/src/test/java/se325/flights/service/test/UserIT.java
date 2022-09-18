@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * Tests functionality related to users and logging in / out.
  */
-//@Disabled
+
 public class UserIT extends BaseIntegrationTests {
 
     /**

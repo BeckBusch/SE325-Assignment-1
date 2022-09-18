@@ -1,9 +1,17 @@
 package se325.flights.service;
 
+import se325.flights.CabinClass;
+import se325.flights.domain.AircraftType;
+import se325.flights.domain.BookingException;
+import se325.flights.domain.Flight;
+import se325.flights.domain.Seat;
 import se325.flights.dto.AvailableSeatsSubscriptionDTO;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.TypedQuery;
 import javax.ws.rs.container.AsyncResponse;
+import javax.ws.rs.core.Response;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -98,8 +106,41 @@ public class SubscriptionManager {
      * false otherwise.
      */
     public boolean processSingleSubscription(AvailableSeatsSubscriptionDTO subInfo, AsyncResponse sub, EntityManager em) {
+        long flightId = subInfo.getFlightId();
+        CabinClass flightCabin = subInfo.getCabinClass();
+        int count = subInfo.getNumSeats();
 
-        // TODO: Implement this method
+        try {
+            TypedQuery<Flight> flightsQuery = em.createQuery(
+                            "select f from Flight f where f.id = :idLink", Flight.class)
+                    .setParameter("idLink", flightId);
+            Flight reqFlight = flightsQuery.getSingleResult();
+
+            int totalSeats = reqFlight.getAircraftType().getTotalNumSeats(flightCabin);
+
+            if (flightCabin == null) {
+                totalSeats = reqFlight.getNumSeatsRemaining();
+            } else {
+                List<Seat> flightSeats = reqFlight.getBookedSeats();
+                for (Seat i : flightSeats) {
+                    if (reqFlight.getAircraftType().getCabinClass(i.getSeatCode()) == flightCabin){
+                        totalSeats--;
+                    }
+                }
+            }
+
+            if (totalSeats >= count) {
+                sub.resume(Response.noContent().build());
+                return true;
+            }
+
+        } catch (NoResultException e) {
+            sub.resume(Response.status(Response.Status.NOT_FOUND).build());
+            return true;
+        } catch (BookingException e) {
+            //sub.resume(Response.status(Response.Status.BAD_REQUEST).build());
+            return false;
+        }
         return false;
     }
 }

@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 /**
  * Tests functionality related to subscriptions (async HTTP requests).
  */
-@Disabled
+
 public class SubscriptionIT extends BaseIntegrationTests {
 
     /**

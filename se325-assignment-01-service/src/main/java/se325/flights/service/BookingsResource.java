@@ -129,12 +129,14 @@ public class BookingsResource {
                     .setParameter("idLink", id)
                     .setParameter("userLink", bookingUser);
 
-            FlightBooking bookedFlight = flightsQuery.getSingleResult();
+            FlightBooking flightBookingRes = flightsQuery.getSingleResult();
 
-            bookedFlight.getFlight().removeBooking(bookedFlight);
-            em.remove(bookedFlight);
+            long flightId = flightBookingRes.getFlight().getId();
+            flightBookingRes.getFlight().removeBooking(flightBookingRes);
+            em.remove(flightBookingRes);
             em.getTransaction().commit();
 
+            SubscriptionManager.instance().processSubscriptions(flightId);
             return Response.status(Response.Status.NO_CONTENT).build();
 
         } catch (NoResultException e) {

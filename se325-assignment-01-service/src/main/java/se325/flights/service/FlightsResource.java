@@ -5,12 +5,17 @@ import se325.flights.domain.Airport;
 import se325.flights.domain.Flight;
 import se325.flights.domain.User;
 import se325.flights.domain.mappers.FlightMapper;
+import se325.flights.dto.AvailableSeatsSubscriptionDTO;
 import se325.flights.dto.BookingInfoDTO;
 import se325.flights.dto.FlightDTO;
+import se325.flights.util.SecurityUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.ws.rs.*;
+import javax.ws.rs.container.AsyncResponse;
+import javax.ws.rs.container.Suspended;
+import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.time.*;
@@ -133,4 +138,22 @@ public class FlightsResource {
         }
     }
 
+    @POST
+    @Path("subscribe")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void subscribeToFlight(@CookieParam("authToken") Cookie auth,
+                                  AvailableSeatsSubscriptionDTO assDTO,
+                                  @Suspended AsyncResponse sub) {
+        EntityManager em = PersistenceManager.instance().createEntityManager();
+        User reqUser = SecurityUtils.getUserWithAuthToken(em, auth);
+        assDTO.setUserId(reqUser.getId());
+
+        try {
+            SubscriptionManager.instance().addSubscription(assDTO, sub);
+            SubscriptionManager.instance().processSingleSubscription(assDTO, sub, em);
+        } finally {
+            em.close();
+        }
+
+    }
 }
