@@ -20,7 +20,7 @@ public class User {
     private String passHash;
     private String authToken;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER)
     private Set<FlightBooking> bookings = new HashSet<>();
 
     /**
